@@ -22,9 +22,8 @@ class Card extends React.Component {
   render() {
     const { flipped, emoji } = this.state;
     const pose = flipped ? "flipped" : "init";
-
     return (
-      <div style={cardCSS} onClick={() => this.clickHandler()}>
+      <div onClick={() => this.clickHandler()} style={cardCSS}>
         <Front pose={pose}>{emoji} </Front>
         <Back pose={pose} />
       </div>

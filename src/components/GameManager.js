@@ -1,46 +1,48 @@
 import React from "react";
 import Card from "./card";
-
 const emojis = require("../emojis.json").emojis;
 
 class GameManager extends React.Component {
-  constructor(num) {
-    super();
-    this.state = {
-      numCards: 4,
-      deck: [
-        { emoji: "🌲" },
-        { emoji: "💗" },
-        { emoji: "🌈" },
-        { emoji: "🍦" },
-        { emoji: "⛈" },
-        { emoji: "🌻" },
-        { emoji: "💯" },
-        { emoji: "👽" }
-      ]
-    };
-    this.emojis = emojis;
+  state = {
+    numCards: 12,
+    numClicks: 0,
+    deck: []
+  };
+
+  componentDidMount() {
+    this.spawnDeck(this.state.numCards);
   }
 
-  randomizeDeck() {}
-
   spawnDeck(numCards) {
-    for (let i = 0; i < numCards; i++) {
-      this.setState({
-        deck: this.updateExpression(this.state.items, {
-          i: { deck: { $push: this.emojis[i] } }
-        })
-      });
+    const deck = [numCards];
+    for (let i = 0; i < numCards / 2; i++) {
+      const v = Math.floor(Math.random() * emojis.length);
+      //TODO: make sure v cant equal previously used v
+      deck[i] = deck[i + numCards] = {
+        emoji: emojis[v],
+        flipped: false
+      };
     }
+    deck.sort(() => Math.random() - 0.5);
+    this.setState({
+      deck: deck
+    });
+  }
+
+  cardClicked(card) {
+    const { numClicks, deck } = this.state;
+    if (numClicks % 2 === 0) {
+    }
+    card.flipped = true;
   }
 
   render() {
     const { deck } = this.state;
 
     return (
-      <div class="game-board">
+      <div className="game-board">
         {deck.map((c, i) => (
-          <Card key={i} {...c} />
+          <Card onClick={c => this.cardClicked(c)} key={i} {...c} />
         ))}
       </div>
     );
