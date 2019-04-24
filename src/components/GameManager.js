@@ -8,10 +8,21 @@ class GameManager extends React.Component {
     super();
     this.state = {
       numCards: 4,
-      deck: []
+      deck: [
+        { emoji: "🌲" },
+        { emoji: "💗" },
+        { emoji: "🌈" },
+        { emoji: "🍦" },
+        { emoji: "⛈" },
+        { emoji: "🌻" },
+        { emoji: "💯" },
+        { emoji: "👽" }
+      ]
     };
     this.emojis = emojis;
   }
+
+  randomizeDeck() {}
 
   spawnDeck(numCards) {
     for (let i = 0; i < numCards; i++) {
@@ -28,12 +39,6 @@ class GameManager extends React.Component {
 
     return (
       <div class="game-board">
-        <Card emoji="🌲" />
-        <Card emoji="🌈" />
-        <Card emoji="💗" />
-        <Card emoji="🌲" />
-        <Card emoji="🌈" />
-        <Card emoji="💗" />
         {deck.map((c, i) => (
           <Card key={i} {...c} />
         ))}
