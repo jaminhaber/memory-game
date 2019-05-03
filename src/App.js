@@ -5,7 +5,6 @@ import GameManager from "./components/GameManager";
 function App() {
   return (
     <div className="App">
-      <header className="App-header" />
       <GameManager />
     </div>
   );
