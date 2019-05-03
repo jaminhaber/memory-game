@@ -1,49 +1,61 @@
 import React from "react";
 import Card from "./card";
-const emojis = require("../emojis.json").emojis;
+import Counter from "./TurnCounter";
+import { spawnDeck } from "./GameLogic";
 
 class GameManager extends React.Component {
   state = {
-    numCards: 12,
-    numClicks: 0,
-    deck: []
+    numCards: this.props.numCards || 8,
+    numClicks: 1,
+    deck: [],
+    last: null
   };
 
   componentDidMount() {
-    this.spawnDeck(this.state.numCards);
-  }
-
-  spawnDeck(numCards) {
-    const deck = [numCards];
-    for (let i = 0; i < numCards / 2; i++) {
-      const v = Math.floor(Math.random() * emojis.length);
-      //TODO: make sure v cant equal previously used v
-      deck[i] = deck[i + numCards] = {
-        emoji: emojis[v],
-        flipped: false
-      };
-    }
-    deck.sort(() => Math.random() - 0.5);
     this.setState({
-      deck: deck
+      deck: spawnDeck(this.state.numCards)
     });
+    console.log(this.props);
   }
 
-  cardClicked(card) {
-    const { numClicks, deck } = this.state;
+  checkIfSolved() {
+    const { deck } = this.state;
+
+    deck.forEach(c => {
+      if (c.pose !== "solved") c.pose = "init";
+    });
+
+    this.setState({ deck: deck });
+  }
+
+  cardClicked(id) {
+    const { numClicks, deck, last } = this.state;
+    const card = deck.find(s => s.id === id);
+
+    if (card.pose === "solved") return;
+    card.pose = "flipped";
+
     if (numClicks % 2 === 0) {
+      if (last.emoji === card.emoji) {
+        last.pose = card.pose = "solved";
+      }
+      setTimeout(() => this.checkIfSolved(), 500);
     }
-    card.flipped = true;
+
+    this.setState({ deck: deck, numClicks: numClicks + 1, last: card });
   }
 
   render() {
-    const { deck } = this.state;
+    const { deck, numClicks } = this.state;
 
     return (
-      <div className="game-board">
-        {deck.map((c, i) => (
-          <Card onClick={c => this.cardClicked(c)} key={i} {...c} />
-        ))}
+      <div className="game">
+        <Counter numClicks={numClicks} />
+        <div className="game-board">
+          {deck.map((c, i) => (
+            <Card onClick={c => this.cardClicked(c)} key={i} {...c} />
+          ))}
+        </div>
       </div>
     );
   }
