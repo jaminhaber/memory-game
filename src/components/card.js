@@ -1,10 +1,34 @@
 import React from "react";
 import posed from "react-pose";
 
+const cardCSS = {
+  flex: "0 0 25%",
+  border: "1px solid black",
+  height: "0 !important",
+  paddingBottom: "25%",
+  position: "relative",
+  margin: 0,
+  boxSizing: "border-box"
+};
+
+const sideCSS = {
+  position: "absolute",
+  left: 0,
+  top: 0,
+  width: "100%",
+  height: "100%",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  fontSize: "4rem"
+};
+
 const Card = ({ emoji, pose, onClick, id }) => (
-  <div onClick={() => onClick(id)}>
-    <Front pose={pose}>{emoji} </Front>
-    <Back pose={pose} />
+  <div style={cardCSS} onClick={() => onClick(id)}>
+    <Front style={sideCSS} pose={pose}>
+      {emoji}
+    </Front>
+    <Back style={sideCSS} pose={pose} />
   </div>
 );
 

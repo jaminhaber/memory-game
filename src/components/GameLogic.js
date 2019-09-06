@@ -4,7 +4,6 @@ export const spawnDeck = numCards => {
   const deck = [numCards];
   for (let i = 0; i < numCards / 2; i++) {
     const v = Math.floor(Math.random() * emojis.length);
-    //TODO: make sure v cant equal previously used v
     deck[i] = {
       emoji: emojis[v],
       pose: "init",
@@ -15,6 +14,7 @@ export const spawnDeck = numCards => {
       pose: "init",
       id: i + numCards
     };
+    emojis.splice(v, 1);
   }
   deck.sort(() => Math.random() - 0.5);
 
