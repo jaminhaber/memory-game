@@ -3,10 +3,22 @@ import Card from "./card";
 import Counter from "./TurnCounter";
 import { spawnDeck } from "./GameLogic";
 
+const gameBoardCss = {
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "stretch",
+  justifyContent: "space-around",
+  flexWrap: "wrap",
+  width: "80%",
+  margin: "0 auto"
+};
+
 class GameManager extends React.Component {
   state = {
-    numCards: this.props.numCards || 8,
+    numCards: this.props.numCards || 12,
+    win: false,
     numClicks: 1,
+    numSolved: 0,
     deck: [],
     last: null
   };
@@ -15,11 +27,14 @@ class GameManager extends React.Component {
     this.setState({
       deck: spawnDeck(this.state.numCards)
     });
-    console.log(this.props);
   }
 
   checkIfSolved() {
-    const { deck } = this.state;
+    const { deck, numSolved, numCards } = this.state;
+
+    if (numSolved >= numCards / 2) {
+      this.setState({ win: true });
+    }
 
     deck.forEach(c => {
       if (c.pose !== "solved") c.pose = "init";
@@ -29,7 +44,7 @@ class GameManager extends React.Component {
   }
 
   cardClicked(id) {
-    const { numClicks, deck, last } = this.state;
+    const { numSolved, numClicks, deck, last } = this.state;
     const card = deck.find(s => s.id === id);
 
     if (card.pose === "solved") return;
@@ -38,6 +53,7 @@ class GameManager extends React.Component {
     if (numClicks % 2 === 0) {
       if (last.emoji === card.emoji) {
         last.pose = card.pose = "solved";
+        this.setState({ numSolved: numSolved + 1 });
       }
       setTimeout(() => this.checkIfSolved(), 500);
     }
@@ -46,12 +62,13 @@ class GameManager extends React.Component {
   }
 
   render() {
-    const { deck, numClicks } = this.state;
+    const { deck, numClicks, win } = this.state;
 
     return (
       <div className="game">
+        {win && <h1>Win!</h1>}
         <Counter numClicks={numClicks} />
-        <div className="game-board">
+        <div style={gameBoardCss}>
           {deck.map((c, i) => (
             <Card onClick={c => this.cardClicked(c)} key={i} {...c} />
           ))}
