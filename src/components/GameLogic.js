@@ -1,7 +1,7 @@
-const emojis = require("../emojis.json").emojis;
-
 export const spawnDeck = numCards => {
+  const emojis = getEmojis();
   const deck = [numCards];
+
   for (let i = 0; i < numCards / 2; i++) {
     const v = Math.floor(Math.random() * emojis.length);
     deck[i] = {
@@ -12,7 +12,7 @@ export const spawnDeck = numCards => {
     deck[i + numCards] = {
       emoji: emojis[v],
       pose: "init",
-      id: i + numCards
+      id: numCards + i
     };
     emojis.splice(v, 1);
   }
@@ -20,3 +20,5 @@ export const spawnDeck = numCards => {
 
   return deck;
 };
+
+export const getEmojis = () => require("../emojis.json").emojis;

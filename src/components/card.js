@@ -23,8 +23,9 @@ const sideCSS = {
   fontSize: "4rem"
 };
 
-const Card = ({ emoji, pose, onClick, id }) => (
-  <div style={cardCSS} onClick={() => onClick(id)}>
+const Card = ({ emoji, pose, onClick }) => (
+  <div style={cardCSS} onClick={() => onClick()}>
+    {console.log(pose)}
     <Front style={sideCSS} pose={pose}>
       {emoji}
     </Front>
@@ -33,13 +34,13 @@ const Card = ({ emoji, pose, onClick, id }) => (
 );
 
 const Back = posed.div({
-  init: { background: "goldenRod", opacity: 1 },
+  init: { background: "goldenRod", opacity: 1, transition: { delay: 100 } },
   flipped: { opacity: 0 },
   solved: { opacity: 0 }
 });
 
 const Front = posed.div({
-  init: { background: "pink", opacity: 0 },
+  init: { background: "pink", opacity: 0, transition: { delay: 100 } },
   flipped: { opacity: 1 },
   solved: { opacity: 1, background: "red" }
 });
