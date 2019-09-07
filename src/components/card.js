@@ -25,7 +25,6 @@ const sideCSS = {
 
 const Card = ({ emoji, pose, onClick }) => (
   <div style={cardCSS} onClick={() => onClick()}>
-    {console.log(pose)}
     <Front style={sideCSS} pose={pose}>
       {emoji}
     </Front>
