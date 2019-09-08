@@ -3,7 +3,13 @@ import { spawnDeck } from "./GameLogic";
 export const reducer = (state, action) => {
   switch (action.type) {
     case "new-deck":
-      return { ...state, deck: spawnDeck(action.payload.numCards || 12) };
+      return {
+        ...state,
+        numClicks: 0,
+        numSolved: 0,
+        refresh: false,
+        deck: spawnDeck(action.payload.numCards || 12)
+      };
     case "flip-card":
       const selectedCard = state.deck[action.payload.index];
 
